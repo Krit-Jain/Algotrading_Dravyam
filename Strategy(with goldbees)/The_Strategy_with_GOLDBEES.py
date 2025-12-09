@@ -7,17 +7,21 @@ import matplotlib.pyplot as plt
 # from jugaad_data.nse import stock_df # Not used in the provided script, can be removed
 import matplotlib.dates as mdates
 import matplotlib.ticker as mtick
+import os
 
 # --- DATA PREPARATION ---
 
 # Read and clean the CSV
 # Make sure your CSV file is in the same directory as this script
 try:
-    df = pd.read_csv("Nifty750_tradetiger.csv", low_memory=False)
+    df = pd.read_csv("Nifty750_tradetiger(Goldbees).csv", low_memory=False)
 except FileNotFoundError:
-    print("❌ Error: 'Nifty750_tradetiger.csv' not found. Please place it in the correct directory.")
+    print("❌ Error: 'Nifty750_tradetiger.csv(Goldbees)' not found. Please place it in the correct directory.")
     exit()
 
+# Create output folder
+output_folder = "Results(2016-2025)"
+os.makedirs(output_folder, exist_ok=True)
 
 # # Rename columns for consistency
 # df.rename(columns={
@@ -91,7 +95,7 @@ month_markers = df_dates_only.index.to_period("M").unique()
 first_days = df.groupby(df['Date'].dt.to_period("M"))["Date"].min()
 last_days = df.groupby(df['Date'].dt.to_period("M"))["Date"].max()
 
-time_range_mask = (first_days.index >= "2020-01") & (last_days.index <= "2025-11")
+time_range_mask = (first_days.index >= "2016-01") & (last_days.index <= "2025-11")
 month_starts = list(first_days[time_range_mask].sort_values())
 month_ends = list(last_days[time_range_mask].sort_values())
 
@@ -105,7 +109,7 @@ results = []
 # --- MAIN BACKTESTING LOOP ---
 print("🚀 Starting Hybrid Strategy Backtest...")
 
-for rank_start in range(0, 10, 5):
+for rank_start in range(0, 50, 5):
     rank_end = rank_start + 5
     capital = 1000000
     initial_capital = capital
@@ -209,7 +213,7 @@ for rank_start in range(0, 10, 5):
 
     # --- PERFORMANCE CALCULATION ---
     if not equity_curve:
-        print(f"⚠️ No trades were executed for Rank={rank_start}-{rank_end}. Skipping.")
+        print(f"⚠ No trades were executed for Rank={rank_start}-{rank_end}. Skipping.")
         continue
         
     equity_df = pd.DataFrame(equity_curve)
@@ -247,7 +251,9 @@ for rank_start in range(0, 10, 5):
         final_df["Max_Drawdown_%"] = round(max_drawdown, 2)
         final_df["Sharpe_Ratio"] = round(sharpe, 2)
         
-        filename = f"results_hybrid_rank{rank_start}_{rank_end}_tradetiger.csv"
+        # filename = f"results_hybrid_rank{rank_start}_{rank_end}_tradetiger.csv"
+        # final_df.to_csv(filename, index=False)
+        filename = os.path.join(output_folder, f"results_hybrid_rank{rank_start}_{rank_end}_tradetiger.csv")
         final_df.to_csv(filename, index=False)
 
     print(f"✅ Completed: Rank={rank_start}-{rank_end}, Final Capital=₹{capital:.2f}, CAGR={cagr:.2f}%, Max DD={max_drawdown:.2f}%")
@@ -259,4 +265,3 @@ if results:
     print(f"\n📈 Best Strategy: Holding={best[0]}M, Rank={best[1]}–{best[2]}, Final Capital=₹{round(best[3],2)}")
 else:
     print("\nNo results were generated from the backtest.")
-
