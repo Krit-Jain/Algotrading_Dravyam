@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
-#Nifty750_with_Goldbees.csv
+
 # Config
 lookback_months = 2   # change to 1 or 2 etc.
 
 # Load data
-df = pd.read_csv("Nifty750_tradetiger.csv", low_memory=False)
+df = pd.read_csv("Nifty750_tradetiger(Goldbees).csv", low_memory=False)
 
 # Standardize columns
 # df.rename(columns={
@@ -25,6 +25,48 @@ df = pd.read_csv("Nifty750_tradetiger.csv", low_memory=False)
 #     "NO OF TRADES": "No Of Trades",
 #     "SYMBOL": "Symbol"
 # }, inplace=True)
+# --- WATCHLIST FILTERING ---
+# Define your watchlist
+Nifty_fno = [
+    '360ONE', 'ABB', 'APLAPOLLO', 'AUBANK', 'ADANIENSOL', 'ADANIENT', 'ADANIGREEN', 'ADANIPORTS',
+    'ABCAPITAL', 'ALKEM', 'AMBER', 'AMBUJACEM', 'ANGELONE', 'APOLLOHOSP', 'ASHOKLEY', 'ASIANPAINT',
+    'ASTRAL', 'AUROPHARMA', 'DMART', 'AXISBANK', 'BSE', 'BAJAJ-AUTO', 'BAJFINANCE', 'BAJAJFINSV',
+    'BANDHANBNK', 'BANKBARODA', 'BANKINDIA', 'BDL', 'BEL', 'BHARATFORG', 'BHEL', 'BPCL', 'BHARTIARTL',
+    'BIOCON', 'BLUESTARCO', 'BOSCHLTD', 'BRITANNIA', 'CGPOWER', 'CANBK', 'CDSL', 'CHOLAFIN', 'CIPLA',
+    'COALINDIA', 'COFORGE', 'COLPAL', 'CAMS', 'CONCOR', 'CROMPTON', 'CUMMINSIND', 'CYIENT', 'DLF',
+    'DABUR', 'DALBHARAT', 'DELHIVERY', 'DIVISLAB', 'DIXON', 'DRREDDY', 'ETERNAL', 'EICHERMOT',
+    'EXIDEIND', 'NYKAA', 'FORTIS', 'GAIL', 'GMRAIRPORT', 'GLENMARK', 'GODREJCP', 'GODREJPROP',
+    'GRASIM', 'HCLTECH', 'HDFCAMC', 'HDFCBANK', 'HDFCLIFE', 'HFCL', 'HAVELLS', 'HEROMOTOCO',
+    'HINDALCO', 'HAL', 'HINDPETRO', 'HINDUNILVR', 'HINDZINC', 'POWERINDIA', 'HUDCO', 'ICICIBANK',
+    'ICICIGI', 'ICICIPRULI', 'IDFCFIRSTB', 'IIFL', 'ITC', 'INDIANB', 'IEX', 'IOC', 'IRCTC', 'IRFC',
+    'IREDA', 'INDUSTOWER', 'INDUSINDBK', 'NAUKRI', 'INFY', 'INOXWIND', 'INDIGO', 'JINDALSTEL',
+    'JSWENERGY', 'JSWSTEEL', 'JIOFIN', 'JUBLFOOD', 'KEI', 'KPITTECH', 'KALYANKJIL', 'KAYNES',
+    'KFINTECH', 'KOTAKBANK', 'LTF', 'LICHSGFIN', 'LTIM', 'LT', 'LAURUSLABS', 'LICI', 'LODHA',
+    'LUPIN', 'M&M', 'MANAPPURAM', 'MANKIND', 'MARICO', 'MARUTI', 'MFSL', 'MAXHEALTH', 'MAZDOCK',
+    'MPHASIS', 'MCX', 'MUTHOOTFIN', 'NBCC', 'NCC', 'NHPC', 'NMDC', 'NTPC', 'NATIONALUM', 'NESTLEIND',
+    'NUVAMA', 'OBEROIRLTY', 'ONGC', 'OIL', 'PAYTM', 'OFSS', 'POLICYBZR', 'PGEL', 'PIIND', 'PNBHOUSING',
+    'PAGEIND', 'PATANJALI', 'PERSISTENT', 'PETRONET', 'PIDILITIND', 'PPLPHARMA', 'POLYCAB', 'PFC',
+    'POWERGRID', 'PRESTIGE', 'PNB', 'RBLBANK', 'RECLTD', 'RVNL', 'RELIANCE', 'SBICARD', 'SBILIFE',
+    'SHREECEM', 'SRF', 'SAMMAANCAP', 'MOTHERSON', 'SHRIRAMFIN', 'SIEMENS', 'SOLARINDS', 'SONACOMS',
+    'SBIN', 'SAIL', 'SUNPHARMA', 'SUPREMEIND', 'SUZLON', 'SYNGENE', 'TATACONSUM', 'TITAGARH',
+    'TVSMOTOR', 'TCS', 'TATAELXSI', 'TMPV', 'TATAPOWER', 'TATASTEEL', 'TATATECH', 'TECHM', 'FEDERALBNK',
+    'INDHOTEL', 'PHOENIXLTD', 'TITAN', 'TORNTPHARM', 'TORNTPOWER', 'TRENT', 'TIINDIA', 'UNOMINDA',
+    'UPL', 'ULTRACEMCO', 'UNIONBANK', 'UNITDSPR', 'VBL', 'VEDL', 'IDEA', 'VOLTAS', 'WIPRO',
+    'YESBANK', 'ZYDUSLIFE'
+]
+
+# Ensure GOLDBEES is included if it exists in the data (Required for Strategy 1)
+# We append it to the filter list so it isn't removed during the filtering step.
+filter_list = Nifty_fno + ['GOLDBEES']
+
+# Filter the DataFrame to keep only symbols in the watchlist
+if "symbol" in df.columns:
+    df = df[df["symbol"].isin(filter_list)]
+elif "Symbol" in df.columns:
+    df = df[df["Symbol"].isin(filter_list)]
+else:
+    print("⚠ Warning: Could not find 'symbol' or 'Symbol' column for filtering. Skipping watchlist filter.")
+# -----------------------------
 
 # Clean
 df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
