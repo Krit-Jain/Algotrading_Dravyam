@@ -125,7 +125,7 @@ The backtester will:
 - Run the Strategy-3 momentum engine (M-3 → M-2 window) across valid months
 - Run December special logic where implemented
 - Compute and save metrics: Final capital, CAGR, Sharpe, Max Drawdown
-- Export trade logs and results under the **Results(YYYY-YYYY)** directory
+- Export trade logs and results under the `Results(YYYY-YYYY)` directory
 
 Example output file:
 ```bash
@@ -202,5 +202,9 @@ CSV Outputs (signals & results)
 This framework is part of Dravyam’s quantitative research initiative.  
 Feel free to open issues or request enhancements.
 
-## 📘 License  
-Internal research project for Dravyam.
+## 📘 License
+
+This project is an internal research repository developed for **Dravyam**.  
+All code, strategies, and research artifacts are proprietary and may not be copied, distributed, or reused without written permission.
+
+See the LICENSE file for full terms.
