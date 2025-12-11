@@ -85,3 +85,49 @@ Install Python dependencies:
 
 ```bash
 pip install pandas numpy matplotlib
+```
+If you plan to visualize equity curves, matplotlib is useful (already included above).
+
+---
+
+## 🚀 Running STOCKS Signal Generators
+
+STOCKS scripts generate monthly TOP N stock signals (they do NOT perform backtests). Example:
+
+```bash
+python Stocks_1_Nifty750.py
+```
+This will create a file like:
+```
+top_10_stocks_2M_signals.csv
+```
+Each row contains:
+
+- Signal_Month
+- Signal_Date
+- Lookback_Start_Month
+- Lookback_Start_Date
+- Buy_on (first trading day of next month)
+- Symbol
+- Return_Past2M(%) (or similar label)
+
+---
+
+## 🧪 Running STRATEGY Backtests
+
+To run a full backtest (seasonal + momentum + metrics), run:
+
+```bash
+python Strategy_1_Nifty750.py
+```
+The backtester will:
+- Run GOLD BEES seasonal trade (Jan → Mar) where applicable
+- Run the Strategy-3 momentum engine (M-3 → M-2 window) across valid months
+- Run December special logic where implemented
+- Compute and save metrics: Final capital, CAGR, Sharpe, Max Drawdown
+- Export trade logs and results under the **Results(YYYY-YYYY)** directory
+
+Example output file:
+```bash
+Results(2016-2025)/results_hybrid_rank0_5_tradetiger.csv
+```
