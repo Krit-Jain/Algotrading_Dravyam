@@ -26,4 +26,46 @@ The strategies share the same architecture but differ in **how gainers are selec
 ---
 
 # 📂 **Repository Structure**
+Algotrading_Dravyam/
+│
+├── Strategy(with goldbees)/
+│ ├── Stocks_1_Nifty750.py
+│ ├── Stocks_1_fno.py
+│ ├── Stocks_2_Nifty750.py
+│ ├── Stocks_2_fno.py
+│ ├── Strategy_1_Nifty750.py
+│ ├── Strategy_1_fno.py
+│ ├── Strategy_2_Nifty750.py
+│ ├── Strategy_2_fno.py
+│
+├── Nifty750_tradetiger(Goldbees).csv
+└── README.md
+
+---
+
+# 🔍 **How Strategy 1 & Strategy 2 Differ**
+
+| Feature | Strategy 1 | Strategy 2 |
+|--------|------------|------------|
+| Seasonal Component | Yes | Yes |
+| Momentum Window | Fixed return window (M-3 → M-2) | Same but with different ranking logic |
+| Holding Period | Flexible | Flexible |
+| Gainer Logic | Hybrid seasonal + monthly momentum | Pure momentum with hybrid filters |
+| Coverage Months | Jan→Dec | Jan→Dec |
+
+Both systems **use Strategy-3 as the backbone**, applied across valid months with consistent return computation.
+
+---
+
+# ⚙️ **Installation**
+
+To install all required dependencies:
+
+```bash
+pip install pandas numpy matplotlib
+
+If you plan to visualize equity curves:
+
+pip install matplotlib
+
 
