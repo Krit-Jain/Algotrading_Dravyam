@@ -59,7 +59,7 @@ Nifty_fno = [
     'YESBANK', 'ZYDUSLIFE'
 ]
 # Ensure GOLDBEES present if you rely on it elsewhere
-filter_list = list(set(Nifty_fno + ['GOLDBEES']))
+filter_list = list(set(Nifty_fno))
 
 # Apply filter only if the symbol column exists
 if "symbol" in df.columns:
