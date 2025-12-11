@@ -131,3 +131,76 @@ Example output file:
 ```bash
 Results(2016-2025)/results_hybrid_rank0_5_tradetiger.csv
 ```
+
+---
+
+## 📊 Backtest Metrics Provided
+Each STRATEGY run produces:
+
+- Entry/Exit Dates
+- Symbol
+- Buy/Sell Price
+- Shares
+- PnL
+- Past Return (%) used for ranking
+- Final Capital
+- CAGR (%)
+- Max Drawdown (%)
+- Sharpe Ratio
+
+---
+
+## 🧱 System Architecture
+Simple flow (ASCII diagram):
+```
+Raw CSV (NSE data)
+      │
+      ▼
+Data Cleaning (normalize, dedupe)
+      │
+      ▼
+Monthly Calendar Builder (first/last trading days)
+      │
+      ▼
+Strategy Engine (Seasonal + Momentum)
+      │
+ ┌────┴────┐
+ │         │
+STOCKS   STRATEGY
+(Signals) (Backtests + Metrics)
+      │
+      ▼
+CSV Outputs (signals & results)
+```
+
+---
+
+## ⚙️ Output Files & Locations
+- Signal CSVs (from STOCKS scripts): top_10_stocks_2M_signals.csv (or similar naming based on LOOKBACK_MONTHS)
+- Backtest results (from STRATEGY scripts): Results(YYYY-YYYY)/results_hybrid_rank<start>_<end>_tradetiger.csv
+- Trade logs: saved alongside backtest results as CSVs (same folder)
+
+---
+
+## 🚫 Filtering & Exclusions (Important)
+-Minimum price filter: Close > 25 (configurable in code)
+-Excluded symbols (removed from momentum ranking):
+ - BOMDYEING
+ - PATANJALI
+ - ALOKINDS
+ - ORCHPHARMA
+ - GOLDBEES (excluded from momentum universe but used for seasonal trade)
+
+## ✅ Best Practices & Tips
+- Ensure Nifty750_tradetiger(Goldbees).csv is placed in the repository root before running scripts.
+- Use a dedicated Python virtual environment to isolate dependencies.
+- Verify Date, symbol, and Close columns exist and are normalized — the scripts try to auto-detect differing cases but consistent headers help.
+- Start with holding_period = 1 for sanity checks, then test 2 and 3. The backtest engine supports flexible holding; ensure sell-month indices exist for larger holding periods.
+- If you want signals for very early months (dataset start), convert to the flexible mode (nearest-available-date fallback) — modify the helper in the STOCKS script.
+
+## 📬 Contact  
+This framework is part of Dravyam’s quantitative research initiative.  
+Feel free to open issues or request enhancements.
+
+## 📘 License  
+Internal research project for Dravyam.
