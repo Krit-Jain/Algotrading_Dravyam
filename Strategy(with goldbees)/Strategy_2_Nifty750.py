@@ -7,10 +7,10 @@ import pandas as pd
 
 # --- CONFIG ---
 INPUT_CSV = "Nifty750_tradetiger(Goldbees).csv"
-OUTPUT_FOLDER = "Results(2016-2025)"
+OUTPUT_FOLDER = "Results_Strategy2_Nifty750_(2016-2025)_5stocks_2M_2H"
 
 month_lookback = 2
-holding_period = 1  # change to 1, 2, or 3 as desired (April->Nov block is flexible)
+holding_period = 2  # change to 1, 2, or 3 as desired (April->Nov block is flexible)
 results = []
 
 # --- DATA PREPARATION ---
@@ -306,7 +306,7 @@ for rank_start in range(0, 50, 5):
         final_df["Max_Drawdown_%"] = round(max_drawdown, 2)
         final_df["Sharpe_Ratio"] = round(sharpe, 2)
 
-        filename = os.path.join(OUTPUT_FOLDER, f"results_hybrid_rank{rank_start}_{rank_end}_tradetiger.csv")
+        filename = os.path.join(OUTPUT_FOLDER, f"results2_Nifty750_rank{rank_start}_{rank_end}_2M_2H.csv")
         final_df.to_csv(filename, index=False)
 
     print(f"✅ Completed: Rank={rank_start}-{rank_end}, Final Capital=₹{capital:.2f}, CAGR={cagr:.2f}%, Max DD={max_drawdown:.2f}%")
