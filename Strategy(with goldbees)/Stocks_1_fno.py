@@ -5,7 +5,7 @@ import os
 # -------- CONFIG ----------
 INPUT_CSV = "Nifty750_tradetiger(Goldbees).csv"
 OUTPUT_FILE_TEMPLATE = "top_10_stocks_{lookback}M_signals.csv"
-LOOKBACK_MONTHS = 2         # change to 1, 2 or 3 (must be >= 1)
+LOOKBACK_MONTHS = 1         # change to 1, 2 or 3 (must be >= 1)
 TOP_N = 10                  # how many top stocks to output per signal month
 # ---------------------------
 
@@ -17,7 +17,9 @@ if LOOKBACK_MONTHS < 1:
 if not os.path.exists(INPUT_CSV):
     raise FileNotFoundError(f"Input CSV not found: {INPUT_CSV}")
 
-df = pd.read_csv(INPUT_CSV, low_memory=False)
+# df = pd.read_csv(INPUT_CSV, low_memory=False)
+chunks = pd.read_csv(INPUT_CSV, chunksize=200_000)
+df = pd.concat(chunks, ignore_index=True)
 
 # Robust column detection and normalization
 date_col = next((c for c in df.columns if c.lower() == "date"), None)
